@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Formulário com Máscaras</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Fomulário de Cadastro</h1>
+        <form>
+            <div class="campo">
+                <label for="">Nome Completo</label>
+                <input class="nome" type="text">
+            </div>
+            <div class="campo">
+                <label for="">E-mail</label>
+                <input class="email" type="email">
+            </div>
+            <div class="campo">
+                <label for="">Telefone</label>
+                <input class="telefone" type="tel">
+            </div>
+            <div class="campo">
+                <label for="">CPF</label>
+                <input class="cpf" type="text">
+            </div>
+            <div class="campo">
+                <label for="">CEP</label>
+                <input class="cep" type="text">
+            </div>
+            <div class="campo">
+                <label for="">Endereço</label>
+                <input class="endereco" type="text">
+            </div>
+            <button>Enviar</button>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="./js/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            $('.telefone').mask('(00) 00000-0000');
+            $('.cpf').mask('000.000.000-00');
+            $('.cep').mask('00000-000');
+
+            $('.cep').blur(function () {
+                var cep = $(this).val().replace(/\D/g, '');
+                $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+
+                    if (!("erro" in dados)) {
+                        $('.endereco').val(dados.logradouro + ', ' + dados.localidade + ' - ' + dados.uf)
+                        $('.endereco').show();
+                    } //end if.
+                    else {
+                        alert("CEP não encontrado.");
+                        $('.endereco').show();
+                    }
+                });
+                $('.endereco').hide();
+            })
+        })
+    </script>
+</body>
+
+</html>
